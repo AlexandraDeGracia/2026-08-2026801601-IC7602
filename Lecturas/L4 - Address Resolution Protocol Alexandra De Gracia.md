@@ -20,41 +20,51 @@ L4 - Address Resolution Protocol
 
 Desarrollo
 1. ¿En qué consiste ARP?
+   
 El Address Resolution Protocol (ARP) es uno de los principales protocolos que forman parte de la suite TCP/IP. Su principal propósito consiste en realizar la correspondencia o mapeo entre una dirección lógica y una dirección física. Específicamente, ARP permite convertir una dirección IPv4 de 32 bits, considerada una dirección lógica, en una dirección física MAC de 48 bits.
 Este protocolo es necesario debido a que las aplicaciones de red utilizan direcciones IPv4 para establecer comunicación con otros dispositivos. Sin embargo, en la capa de enlace de datos, el direccionamiento se realiza mediante direcciones MAC, las cuales corresponden a la dirección física de la tarjeta de red.
 Por lo tanto, cuando una aplicación necesita comunicarse con otro dispositivo dentro de una Red de Área Local (LAN) y conoce su dirección IPv4, ARP se utiliza para encontrar la dirección MAC que corresponde a esa dirección IP. Una vez obtenida la dirección física, es posible realizar la comunicación a través de la red local.
 En otras palabras, ARP funciona como un mecanismo que permite relacionar la dirección lógica utilizada por los protocolos de red con la dirección física necesaria para la transmisión de datos en la capa de enlace. 
-2. ¿Cómo funciona ARP?
+
+3. ¿Cómo funciona ARP?
 El funcionamiento de ARP se realiza mediante un proceso compuesto por siete pasos. Este proceso permite que un dispositivo encuentre la dirección física de otro dispositivo cuando solamente conoce su dirección IP.
+
 Paso 1: El emisor conoce la dirección IP del destino
 El proceso comienza cuando el dispositivo emisor conoce la dirección IP del dispositivo al que desea enviar información. Sin embargo, todavía no conoce la dirección MAC correspondiente a ese dispositivo.
+
 Paso 2: Creación de la solicitud ARP
 El protocolo IP solicita a ARP que cree un mensaje de solicitud denominado ARP Request. En este mensaje se incluyen:
 •	La dirección física del dispositivo emisor. 
 •	La dirección IP del dispositivo emisor. 
 •	La dirección IP del dispositivo destino. 
 Como la dirección MAC del destino todavía es desconocida, el campo correspondiente a la dirección física del destino se llena con ceros.
+
 Paso 3: Encapsulación y envío de la solicitud
 El mensaje ARP pasa a la capa de enlace de datos. Allí, el mensaje se encapsula dentro de una trama.
 La dirección MAC del dispositivo emisor se utiliza como dirección de origen, mientras que como dirección de destino se utiliza una dirección física de broadcast. Esto permite que la solicitud sea recibida por todos los dispositivos de la red local.
+
 Paso 4: Recepción de la solicitud por los dispositivos
 Todos los hosts y routers de la red reciben la trama debido a que fue enviada mediante broadcast. Cada dispositivo examina la solicitud ARP.
 Los dispositivos que no son el destino descartan el paquete. El dispositivo cuya dirección IP coincide con la dirección IP buscada reconoce que la solicitud está dirigida a él.
+
 Paso 5: Envío de la respuesta ARP
 El dispositivo destino crea un mensaje denominado ARP Reply. En esta respuesta proporciona su dirección física o dirección MAC.
 A diferencia de la solicitud ARP, que se transmite mediante broadcast, la respuesta ARP se transmite mediante unicast, es decir, directamente hacia el dispositivo que realizó la solicitud.
+
 Paso 6: El emisor recibe la dirección MAC
 El dispositivo emisor recibe el mensaje ARP Reply y obtiene la dirección física del dispositivo destino.
 A partir de este momento, el emisor ya conoce la relación entre la dirección IP del destino y su dirección MAC.
+
 Paso 7: Envío de los datos
 Después de conocer la dirección física del destino, el datagrama IP que contiene la información puede encapsularse dentro de una trama y enviarse directamente al dispositivo destino mediante unicast.
 De esta manera, ARP permite obtener la dirección MAC necesaria para que la comunicación pueda realizarse correctamente dentro de la red. 
 
-3. ¿Cuáles considera son las ventajas y desventajas de Static y Dynamic Mapping?
+5. ¿Cuáles considera son las ventajas y desventajas de Static y Dynamic Mapping?
 Se muestra dos métodos para establecer la relación entre una dirección lógica y una dirección física: Static Mapping y Dynamic Mapping.
 Static Mapping
 El mapeo estático consiste en crear una tabla que relaciona una dirección lógica con una dirección física. Esta tabla se almacena en cada máquina de la red.
 Por ejemplo, si una máquina conoce la dirección IP de otra máquina, pero no conoce su dirección física, puede buscar la dirección MAC correspondiente dentro de la tabla.
+
 Ventajas del Static Mapping
 Una ventaja del mapeo estático es que permite mantener previamente establecida una relación entre las direcciones IP y las direcciones físicas. La información necesaria se encuentra almacenada en una tabla, por lo que una máquina puede consultar la correspondencia entre una dirección lógica y una dirección física.
 Además, cada dispositivo de la red puede disponer de una tabla con la información de las direcciones que necesita conocer.
@@ -73,10 +83,12 @@ Existen dos protocolos diseñados para realizar el mapeo dinámico:
 •	RARP (Reverse Address Resolution Protocol). 
 ARP realiza el mapeo de una dirección lógica hacia una dirección física. Es decir, permite obtener una dirección MAC cuando se conoce una dirección IP.
 Por otro lado, RARP realiza el proceso contrario, es decir, mapea una dirección física hacia una dirección lógica. Sin embargo, se señala que RARP fue reemplazado por otro protocolo y, por esta razón, el contenido se enfoca principalmente en ARP.
+
 Ventajas del Dynamic Mapping
 La principal ventaja del mapeo dinámico es que permite encontrar la dirección física cuando se conoce la dirección lógica utilizando un protocolo.
 Además, no requiere depender únicamente de una tabla creada y actualizada manualmente, ya que el protocolo puede realizar la búsqueda de la dirección física cuando es necesaria.
 Este método permite realizar el proceso de correspondencia entre direcciones de forma dinámica.
+
 Desventajas del Dynamic Mapping
 De acuerdo con el funcionamiento para obtener una dirección física es necesario realizar un proceso de resolución utilizando un protocolo.
 Por ejemplo, en el caso de ARP, se debe crear una solicitud, transmitirla a través de la red y esperar una respuesta del dispositivo correspondiente antes de conocer su dirección física.
